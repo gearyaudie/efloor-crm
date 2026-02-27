@@ -15,31 +15,61 @@ export default {
       title: 'Description',
       type: 'text',
     },
+
+    // PRICE VARIANTS
     {
-      name: 'price',
-      title: 'Price',
-      type: 'number',
+      name: 'priceVariants',
+      title: 'Price Variants',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'label',
+              title: 'Variant Label',
+              type: 'string',
+              description: 'Example: 1 KG, 4 KG, 20 KG, L8, L15, L30',
+            },
+            {
+              name: 'price',
+              title: 'Price',
+              type: 'number',
+            },
+          ],
+        },
+      ],
     },
+
     {
       name: 'slug',
       type: 'slug',
       title: 'Slug',
-      options: {source: 'title', maxLength: 96},
+      options: {source: 'name', maxLength: 96}, // fixed source
     },
+
     {
       name: 'content',
       title: 'Content',
       type: 'array',
       of: [{type: 'block'}],
     },
+
+    // MULTIPLE IMAGES
     {
-      name: 'image',
-      title: 'Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
+      name: 'images',
+      title: 'Images',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
+      ],
     },
+
     {
       name: 'keywords',
       title: 'SEO Keywords',
