@@ -103,8 +103,9 @@ function syncB2BProjectsToSanity() {
 
     const photoCell = sheet.getRange(row, COLUMNS.photo);
     const image = photoCell.getValue();
-    // Sheets returns an inserted-in-cell image as a CellImage object.
-    const isCellImage = image && typeof image.getBlob === "function";
+    // Sheets returns an inserted-in-cell image as a CellImage object, which
+    // exposes getContentUrl() (not getBlob() — CellImage has no such method).
+    const isCellImage = image && typeof image.getContentUrl === "function";
     if (!isCellImage) continue; // skip incomplete rows (no photo yet)
 
     const type = sheet.getRange(row, COLUMNS.type).getValue();
@@ -115,7 +116,8 @@ function syncB2BProjectsToSanity() {
 
     if (!namaBarang || !namaPT) continue; // skip rows without the basics
 
-    const assetId = uploadImageToSanity_(config, image.getBlob());
+    const imageBlob = UrlFetchApp.fetch(image.getContentUrl()).getBlob();
+    const assetId = uploadImageToSanity_(config, imageBlob);
     const docId = createSanityDocument_(config, {
       _type: "b2bProject",
       type: type ? String(type) : undefined,
